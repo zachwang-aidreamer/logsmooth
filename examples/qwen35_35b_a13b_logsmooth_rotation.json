@@ -1,0 +1,77 @@
+{
+  "name": "logsmooth_rotation",
+  "backbone": "model.language_model",
+  "model_decoder_layers": "model.language_model.layers",
+  "mlp": "mlp.shared_expert",
+  "r1": true,
+  "r2": false,
+  "r3": false,
+  "r4": false,
+  "trainable": false,
+  "online_r1_rotation": true,
+  "rotation_size": 128,
+  "r1_weight_log_smooth": true,
+  "r1_weight_log_smooth_percentile": 99.9,
+  "r1_weight_log_smooth_s_max": 8.0,
+  "r1_activation_log_smooth": true,
+  "r1_activation_log_smooth_percentile": 99.9,
+  "r1_activation_log_smooth_s_max": 16.0,
+  "r1_log_smooth_block_size": 32,
+  "scaling_layers": {
+    "first_layer": [
+      {
+        "norm_module": "model.language_model.layers.layer_id.input_layernorm",
+        "target_modules": [
+          "model.language_model.layers.layer_id.self_attn.q_proj",
+          "model.language_model.layers.layer_id.self_attn.k_proj",
+          "model.language_model.layers.layer_id.self_attn.v_proj",
+          "model.language_model.layers.layer_id.self_attn.o_proj",
+          "model.language_model.layers.layer_id.linear_attn.in_proj_qkv",
+          "model.language_model.layers.layer_id.linear_attn.in_proj_z",
+          "model.language_model.layers.layer_id.linear_attn.in_proj_b",
+          "model.language_model.layers.layer_id.linear_attn.in_proj_a",
+          "model.language_model.layers.layer_id.linear_attn.out_proj"
+        ]
+      },
+      {
+        "norm_module": "model.language_model.layers.layer_id.post_attention_layernorm",
+        "target_modules": [
+          "model.language_model.layers.layer_id.mlp.shared_expert.up_proj",
+          "model.language_model.layers.layer_id.mlp.shared_expert.gate_proj",
+          "model.language_model.layers.layer_id.mlp.experts.*.up_proj",
+          "model.language_model.layers.layer_id.mlp.experts.*.gate_proj"
+        ]
+      }
+    ],
+    "middle_layers": [
+      {
+        "norm_module": "model.language_model.layers.layer_id.input_layernorm",
+        "target_modules": [
+          "model.language_model.layers.layer_id.self_attn.q_proj",
+          "model.language_model.layers.layer_id.self_attn.k_proj",
+          "model.language_model.layers.layer_id.self_attn.v_proj",
+          "model.language_model.layers.layer_id.self_attn.o_proj",
+          "model.language_model.layers.layer_id.linear_attn.in_proj_qkv",
+          "model.language_model.layers.layer_id.linear_attn.in_proj_z",
+          "model.language_model.layers.layer_id.linear_attn.in_proj_b",
+          "model.language_model.layers.layer_id.linear_attn.in_proj_a",
+          "model.language_model.layers.layer_id.linear_attn.out_proj"
+        ]
+      },
+      {
+        "norm_module": "model.language_model.layers.layer_id.post_attention_layernorm",
+        "target_modules": [
+          "model.language_model.layers.layer_id.mlp.shared_expert.up_proj",
+          "model.language_model.layers.layer_id.mlp.shared_expert.gate_proj",
+          "model.language_model.layers.layer_id.mlp.experts.*.up_proj",
+          "model.language_model.layers.layer_id.mlp.experts.*.gate_proj"
+        ]
+      }
+    ],
+    "last_layer": [
+      {
+        "target_modules": []
+      }
+    ]
+  }
+}
