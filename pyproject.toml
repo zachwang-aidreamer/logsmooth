@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "logsmooth"
+version = "0.1.0"
+description = "LogSmooth: power-of-two log-smoothing for AMD Quark rotation-based PTQ"
+readme = "README.md"
+requires-python = ">=3.10,<3.13"
+dependencies = [
+    # AMD Quark provides all rotation/export/quantization infrastructure LogSmooth
+    # builds on. Pinned to the exact release/0.11 commit LogSmooth was ported onto.
+    # PyPI amd-quark is stuck at 0.6.0 and lacks the required rotation internals.
+    "amd-quark @ git+https://github.com/amd/quark.git@210bbb76a1af71d6e5e03f8bea4d3bcf4ef57178",
+    # amd-quark 0.11 is incompatible with torch>=2.12 (its import chain needs
+    # torch.ao.quantization.pt2e, removed in 2.12). Use the 2.6–2.11 window.
+    "torch>=2.6,<2.12",
+    "scipy",
+    "transformers",  # required by quark.torch import chain
+    "accelerate",    # required by RotationProcessor.apply (untie_parameters)
+]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[project.urls]
+homepage = "https://github.com/amd/quark"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
